@@ -16,8 +16,8 @@ namespace Core.Persistence
         public IQueryable<TEntity> Query() => Context.Set<TEntity>();
         public async Task AddAsync(TEntity entity)
         {
-            await Context.AddAsync(entity);
             entity.CreatedDate = DateTime.Now;
+            await Context.AddAsync(entity);
             await Context.SaveChangesAsync();
         }
 
@@ -31,6 +31,13 @@ namespace Core.Persistence
         {
             entity.IsDeleted = true;
             entity.DeletedDate = DateTime.Now;
+            Context.Update(entity);
+            await Context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(TEntity entity)
+        {
+            entity.UpdatedDate = DateTime.Now;
             Context.Update(entity);
             await Context.SaveChangesAsync();
         }
@@ -62,11 +69,60 @@ namespace Core.Persistence
             return await data.ToListAsync();
         }
 
-        public async Task UpdateAsync(TEntity entity)
+        public void Add(TEntity entity)
         {
+            entity.CreatedDate = DateTime.Now;
+            Context.Add(entity);
+            Context.SaveChanges();
+        }
+
+        public void Delete(TEntity entity)
+        {
+            Context.Remove(entity);
+            Context.SaveChanges();
+        }
+
+        public void SoftDelete(TEntity entity)
+        {
+            entity.IsDeleted = true;
+            entity.DeletedDate = DateTime.Now;
             Context.Update(entity);
+            Context.SaveChanges();
+        }
+
+        public void Update(TEntity entity)
+        {
             entity.UpdatedDate = DateTime.Now;
-            await Context.SaveChangesAsync();
+            Context.Update(entity);
+            Context.SaveChanges();
+        }
+
+        public TEntity? Get(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+        {
+            IQueryable<TEntity> data = Context.Set<TEntity>();
+
+            if (include != null)
+            {
+                data = include(data);
+            }
+
+            return data.FirstOrDefault(predicate);
+        }
+
+        public List<TEntity> GetList(Expression<Func<TEntity, bool>>? predicate = null, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+        {
+            IQueryable<TEntity> data = Context.Set<TEntity>();
+
+            if (predicate != null)
+            {
+                data = data.Where(predicate);
+                if (include != null)
+                {
+                    data = include(data);
+                }
+            }
+
+            return data.ToList();
         }
     }
 }
