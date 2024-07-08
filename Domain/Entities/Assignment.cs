@@ -2,16 +2,16 @@
 
 namespace Domain.Entities
 {
-    public class Task : Entity
+    public class Assignment : Entity
     {
         public string Title { get; set; }
         public string Description { get; set; }
 
-        public Task()
+        public Assignment()
         {
         }
 
-        public Task(int id, string title, string description)
+        public Assignment(int id, string title, string description)
             : base(id)
         {
             Title = title;

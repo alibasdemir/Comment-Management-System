@@ -6,7 +6,7 @@ namespace Persistence.Contexts
     public class BaseDbContext : DbContext
     {
         public DbSet<User> Users { get; set; }
-        public DbSet<Domain.Entities.Task> Tasks { get; set; }
+        public DbSet<Assignment> Tasks { get; set; }
         public DbSet<Comment> Comments { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

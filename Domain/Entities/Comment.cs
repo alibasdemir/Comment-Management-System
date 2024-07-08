@@ -4,23 +4,23 @@ namespace Domain.Entities
 {
     public class Comment : Entity
     {
-        public int TaskId { get; set; }
+        public int AssignmentId { get; set; }
         public int UserId { get; set; }
         public string Content { get; set; }
-        public virtual Task Task { get; set; }
+        public virtual Assignment Assignment { get; set; }
         public virtual User User { get; set; }
 
         public Comment()
         {
         }
 
-        public Comment(int id, int taskId, int userId, string content, Task task, User user)
+        public Comment(int id, int assignmentId, int userId, string content, Assignment assignment, User user)
             : base(id)
         {
-            TaskId = taskId;
+            AssignmentId = assignmentId;
             UserId = userId;
             Content = content;
-            Task = task;
+            Assignment = assignment;
             User = user;
         }
     }
