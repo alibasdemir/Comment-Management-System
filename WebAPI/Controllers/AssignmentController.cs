@@ -1,4 +1,5 @@
 ﻿using Application.Features.Assignments.Commands.Create;
+using Application.Features.Assignments.Commands.Delete;
 using Application.Features.Assignments.Commands.Update;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +21,14 @@ namespace WebAPI.Controllers
         {
             UpdateAssignmentResponse updateAssignmentResponse = await _mediator.Send(updateAssignmentCommand);
             return Ok(updateAssignmentResponse);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            DeleteAssignmentCommand deleteAssignmentCommand = new() { Id = id };
+            DeleteAssignmentResponse deleteAssignmentResponse = await _mediator.Send(deleteAssignmentCommand);
+            return Ok(deleteAssignmentResponse);
         }
     }
 }
