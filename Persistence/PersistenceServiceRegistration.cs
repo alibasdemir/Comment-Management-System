@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Application.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 using Persistence.Contexts;
+using Persistence.Repositories;
 
 namespace Persistence
 {
@@ -8,6 +10,8 @@ namespace Persistence
         public static IServiceCollection AddPersistenceServices(this IServiceCollection services)
         {
             services.AddDbContext<BaseDbContext>();
+
+            services.AddScoped<IAssignmentRepository, AssignmentRepository>();
 
             return services;
         }
