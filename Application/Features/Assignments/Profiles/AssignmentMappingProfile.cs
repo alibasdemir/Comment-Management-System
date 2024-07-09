@@ -1,6 +1,7 @@
 ﻿using Application.Features.Assignments.Commands.Create;
 using Application.Features.Assignments.Commands.Delete;
 using Application.Features.Assignments.Commands.Update;
+using Application.Features.Assignments.Queries.GetById;
 using AutoMapper;
 using Domain.Entities;
 
@@ -16,6 +17,8 @@ namespace Application.Features.Assignments.Profiles
             CreateMap<Assignment, UpdateAssignmentResponse>().ReverseMap();
             CreateMap<Assignment, DeleteAssignmentCommand>().ReverseMap();
             CreateMap<Assignment, DeleteAssignmentResponse>().ReverseMap();
+            CreateMap<Assignment, GetByIdAssignmentQuery>().ReverseMap();
+            CreateMap<Assignment, GetByIdAssignmentResponse>().ReverseMap();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Application.Features.Assignments.Commands.Create;
 using Application.Features.Assignments.Commands.Delete;
 using Application.Features.Assignments.Commands.Update;
+using Application.Features.Assignments.Queries.GetById;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -29,6 +30,14 @@ namespace WebAPI.Controllers
             DeleteAssignmentCommand deleteAssignmentCommand = new() { Id = id };
             DeleteAssignmentResponse deleteAssignmentResponse = await _mediator.Send(deleteAssignmentCommand);
             return Ok(deleteAssignmentResponse);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById([FromRoute] int id)
+        {
+            GetByIdAssignmentQuery getByIdAssignmentQuery = new() { Id = id };
+            GetByIdAssignmentResponse getByIdAssignmentResponse = await _mediator.Send(getByIdAssignmentQuery);
+            return Ok(getByIdAssignmentResponse);
         }
     }
 }
