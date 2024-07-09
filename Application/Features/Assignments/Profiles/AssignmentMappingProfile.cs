@@ -2,7 +2,10 @@
 using Application.Features.Assignments.Commands.Delete;
 using Application.Features.Assignments.Commands.Update;
 using Application.Features.Assignments.Queries.GetById;
+using Application.Features.Assignments.Queries.GetList;
 using AutoMapper;
+using Core.Application.Responses;
+using Core.Persistence.Paging;
 using Domain.Entities;
 
 namespace Application.Features.Assignments.Profiles
@@ -19,6 +22,9 @@ namespace Application.Features.Assignments.Profiles
             CreateMap<Assignment, DeleteAssignmentResponse>().ReverseMap();
             CreateMap<Assignment, GetByIdAssignmentQuery>().ReverseMap();
             CreateMap<Assignment, GetByIdAssignmentResponse>().ReverseMap();
+            CreateMap<Assignment, GetListAssignmentQuery>().ReverseMap();
+            CreateMap<Assignment, GetListAssignmentResponse>().ReverseMap();
+            CreateMap<IPaginate<Assignment>, GetListResponse<GetListAssignmentResponse>>().ReverseMap();
         }
     }
 }

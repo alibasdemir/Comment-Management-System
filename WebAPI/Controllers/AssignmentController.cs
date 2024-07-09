@@ -2,6 +2,9 @@
 using Application.Features.Assignments.Commands.Delete;
 using Application.Features.Assignments.Commands.Update;
 using Application.Features.Assignments.Queries.GetById;
+using Application.Features.Assignments.Queries.GetList;
+using Core.Application.Requests;
+using Core.Application.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -38,6 +41,14 @@ namespace WebAPI.Controllers
             GetByIdAssignmentQuery getByIdAssignmentQuery = new() { Id = id };
             GetByIdAssignmentResponse getByIdAssignmentResponse = await _mediator.Send(getByIdAssignmentQuery);
             return Ok(getByIdAssignmentResponse);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetList([FromQuery] PageRequest pageRequest)
+        {
+            GetListAssignmentQuery getListAssignmentQuery = new() { PageRequest = pageRequest };
+            GetListResponse<GetListAssignmentResponse> getListAssignmentResponse = await _mediator.Send(getListAssignmentQuery);
+            return Ok(getListAssignmentResponse);
         }
     }
 }

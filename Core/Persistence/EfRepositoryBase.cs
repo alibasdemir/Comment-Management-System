@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Persistence.Paging;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 
@@ -42,31 +43,41 @@ namespace Core.Persistence
             await Context.SaveChangesAsync();
         }
 
-        public async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+        public async Task<TEntity?> GetAsync(
+            Expression<Func<TEntity, bool>> predicate,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+            bool enableTracking = true,
+            CancellationToken cancellationToken = default
+        )
         {
-            IQueryable<TEntity> data = Context.Set<TEntity>();
+            IQueryable<TEntity> queryable = Query();
+            if (!enableTracking)
+                queryable = queryable.AsNoTracking();
             if (include != null)
-            {
-                data = include(data);
-            }
-
-            return await data.FirstOrDefaultAsync(predicate);
+                queryable = include(queryable);
+            return await queryable.FirstOrDefaultAsync(predicate, cancellationToken);
         }
 
-        public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? predicate = null, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+        public async Task<IPaginate<TEntity>> GetListAsync(
+            Expression<Func<TEntity, bool>>? predicate = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+            int index = 0,
+            int size = 10,
+            bool enableTracking = true,
+            CancellationToken cancellationToken = default
+        )
         {
-            IQueryable<TEntity> data = Context.Set<TEntity>();
-            if (predicate != null)
-            {
-                data = data.Where(predicate);
-            }
-
+            IQueryable<TEntity> queryable = Query();
+            if (!enableTracking)
+                queryable = queryable.AsNoTracking();
             if (include != null)
-            {
-                data = include(data);
-            }
-
-            return await data.ToListAsync();
+                queryable = include(queryable);
+            if (predicate != null)
+                queryable = queryable.Where(predicate);
+            if (orderBy != null)
+                return await orderBy(queryable).ToPaginateAsync(index, size, from: 0, cancellationToken);
+            return await queryable.ToPaginateAsync(index, size, from: 0, cancellationToken);
         }
 
         public void Add(TEntity entity)
@@ -97,32 +108,39 @@ namespace Core.Persistence
             Context.SaveChanges();
         }
 
-        public TEntity? Get(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+        public TEntity? Get(
+            Expression<Func<TEntity, bool>> predicate,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+            bool enableTracking = true
+        )
         {
-            IQueryable<TEntity> data = Context.Set<TEntity>();
-
+            IQueryable<TEntity> queryable = Query();
+            if (!enableTracking)
+                queryable = queryable.AsNoTracking();
             if (include != null)
-            {
-                data = include(data);
-            }
-
-            return data.FirstOrDefault(predicate);
+                queryable = include(queryable);
+            return queryable.FirstOrDefault(predicate);
         }
 
-        public List<TEntity> GetList(Expression<Func<TEntity, bool>>? predicate = null, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+        public IPaginate<TEntity> GetList(
+            Expression<Func<TEntity, bool>>? predicate = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+            int index = 0,
+            int size = 10,
+            bool enableTracking = true
+        )
         {
-            IQueryable<TEntity> data = Context.Set<TEntity>();
-
+            IQueryable<TEntity> queryable = Query();
+            if (!enableTracking)
+                queryable = queryable.AsNoTracking();
+            if (include != null)
+                queryable = include(queryable);
             if (predicate != null)
-            {
-                data = data.Where(predicate);
-                if (include != null)
-                {
-                    data = include(data);
-                }
-            }
-
-            return data.ToList();
+                queryable = queryable.Where(predicate);
+            if (orderBy != null)
+                return orderBy(queryable).ToPaginate(index, size);
+            return queryable.ToPaginate(index, size);
         }
     }
 }
