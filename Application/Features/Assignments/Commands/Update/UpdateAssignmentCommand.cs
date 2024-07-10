@@ -24,11 +24,17 @@ namespace Application.Features.Assignments.Commands.Update
 
             public async Task<UpdateAssignmentResponse> Handle(UpdateAssignmentCommand request, CancellationToken cancellationToken)
             {
-                Assignment mappedAssignment = _mapper.Map<Assignment>(request);
+                // Assignment mappedAssignment = _mapper.Map<Assignment>(request);
+                // We dont use this cause;
+                // * Preserve the current value of CreatedDate because we dont want it to be updated
 
-                await _assignmentRepository.UpdateAsync(mappedAssignment);
+                // Use;
+                Assignment? existingAssignment = await _assignmentRepository.GetAsync(i => i.Id == request.Id);
+                _mapper.Map(request, existingAssignment);
 
-                UpdateAssignmentResponse updateAssignmentResponse = _mapper.Map<UpdateAssignmentResponse>(mappedAssignment);
+                await _assignmentRepository.UpdateAsync(existingAssignment);
+
+                UpdateAssignmentResponse updateAssignmentResponse = _mapper.Map<UpdateAssignmentResponse>(existingAssignment);
                 return updateAssignmentResponse;
             }
         }
