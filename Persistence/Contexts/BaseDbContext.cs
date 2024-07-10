@@ -1,5 +1,8 @@
-﻿using Domain.Entities;
+﻿using Core.Persistence;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Reflection;
 
 namespace Persistence.Contexts
 {
@@ -15,5 +18,34 @@ namespace Persistence.Contexts
 
             base.OnConfiguring(optionsBuilder);
         }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
+        {
+            IEnumerable<EntityEntry<Entity>> entries = ChangeTracker
+                .Entries<Entity>()
+                .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified);
+
+            foreach (EntityEntry<Entity> entry in entries)
+                _ = entry.State switch
+                {
+                    EntityState.Added => entry.Entity.CreatedDate = DateTime.UtcNow,
+                    EntityState.Modified => entry.Entity.UpdatedDate = DateTime.UtcNow,
+                    EntityState.Deleted => entry.Entity.DeletedDate = DateTime.UtcNow
+                };
+            return await base.SaveChangesAsync(cancellationToken);
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        }
+
+        // 2.Method: -index- with fluentAPI
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    base.OnModelCreating(modelBuilder);
+
+        //    modelBuilder.Entity<User>()
+        //        .HasIndex(u => u.FirstName);
+        //}
     }
 }

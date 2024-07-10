@@ -17,7 +17,6 @@ namespace Core.Persistence
         public IQueryable<TEntity> Query() => Context.Set<TEntity>();
         public async Task AddAsync(TEntity entity)
         {
-            entity.CreatedDate = DateTime.Now;
             await Context.AddAsync(entity);
             await Context.SaveChangesAsync();
         }
@@ -31,14 +30,12 @@ namespace Core.Persistence
         public async Task SoftDeleteAsync(TEntity entity)
         {
             entity.IsDeleted = true;
-            entity.DeletedDate = DateTime.Now;
             Context.Update(entity);
             await Context.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(TEntity entity)
         {
-            entity.UpdatedDate = DateTime.Now;
             Context.Update(entity);
             await Context.SaveChangesAsync();
         }
@@ -82,7 +79,6 @@ namespace Core.Persistence
 
         public void Add(TEntity entity)
         {
-            entity.CreatedDate = DateTime.Now;
             Context.Add(entity);
             Context.SaveChanges();
         }
@@ -96,14 +92,12 @@ namespace Core.Persistence
         public void SoftDelete(TEntity entity)
         {
             entity.IsDeleted = true;
-            entity.DeletedDate = DateTime.Now;
             Context.Update(entity);
             Context.SaveChanges();
         }
 
         public void Update(TEntity entity)
         {
-            entity.UpdatedDate = DateTime.Now;
             Context.Update(entity);
             Context.SaveChanges();
         }

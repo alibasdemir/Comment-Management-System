@@ -1,7 +1,9 @@
 ﻿using Core.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Entities
 {
+    [Index(nameof(FirstName))]  // 1.method: -index- for FirstName (2.method: -index- look dbcontext for with fluent API)
     public class User : Entity
     {
         public string FirstName { get; set; }
@@ -14,8 +16,8 @@ namespace Domain.Entities
         }
 
         public User(int id, string firstName, string lastName, string email, byte[] passwordSalt, byte[] passwordHash, string password)
+            : base(id)
         {
-            Id = id;
             FirstName = firstName;
             LastName = lastName;
             Email = email;
