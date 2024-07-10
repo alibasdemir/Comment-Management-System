@@ -12,6 +12,7 @@ namespace Persistence
             services.AddDbContext<BaseDbContext>();
 
             services.AddScoped<IAssignmentRepository, AssignmentRepository>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
 
             return services;
         }
