@@ -13,6 +13,7 @@ namespace Persistence
 
             services.AddScoped<IAssignmentRepository, AssignmentRepository>();
             services.AddScoped<ICommentRepository, CommentRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             return services;
         }

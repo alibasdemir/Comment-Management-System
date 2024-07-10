@@ -4,20 +4,23 @@ namespace Domain.Entities
 {
     public class User : Entity
     {
-        public string Username { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }
-
+        public byte[] PasswordSalt { get; set; }
+        public byte[] PasswordHash { get; set; }
         public User()
         {
         }
 
-        public User(int id, string username, string email, string password)
+        public User(int id, string firstName, string lastName, string email, byte[] passwordSalt, byte[] passwordHash, string password)
         {
             Id = id;
-            Username = username;
+            FirstName = firstName;
+            LastName = lastName;
             Email = email;
-            Password = password;
+            PasswordSalt = passwordSalt;
+            PasswordHash = passwordHash;
         }
     }
 }
