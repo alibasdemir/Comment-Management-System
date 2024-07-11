@@ -1,14 +1,17 @@
 ﻿using Application.Repositories;
 using AutoMapper;
+using Core.Application.Pipelines.Authorization;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Features.Assignments.Commands.Create
 {
-    public class CreateAssignmentCommand : IRequest<CreateAssignmentResponse>
+    public class CreateAssignmentCommand : IRequest<CreateAssignmentResponse>, ISecuredRequest
     {
         public string Title { get; set; }
         public string Description { get; set; }
+
+        public string[] Roles => [];
 
         public class CreateAssignmentCommandHandler : IRequestHandler<CreateAssignmentCommand, CreateAssignmentResponse>
         {

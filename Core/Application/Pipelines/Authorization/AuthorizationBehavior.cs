@@ -18,6 +18,18 @@ namespace Core.Application.Pipelines.Authorization
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
+
+            if (!_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
+            {
+                throw new Exception("You are not logged in!"); // refactor
+            }
+
+            // If no roles are required for the command or query, proceed to the next behavior
+            if (request.Roles.Length == 0)
+            {
+                return await next();
+            }
+
             List<string>? userRoleClaims = _httpContextAccessor.HttpContext.User.ClaimRoles();
 
             if (userRoleClaims == null)
