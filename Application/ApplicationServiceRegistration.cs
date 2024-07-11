@@ -1,6 +1,8 @@
-﻿using Application.Features.Auth.Rules;
-using Core.Application.Pipelines.Authorization;
+﻿using Core.Application.Pipelines.Authorization;
+using Core.Application.Pipelines.Logging;
 using Core.Application.Rules;
+using Core.CrossCuttingConcerns.Exceptions.Logging.Serilog;
+using Core.CrossCuttingConcerns.Exceptions.Logging.Serilog.Logger;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -15,7 +17,11 @@ namespace Application
             {
                 config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
                 config.AddOpenBehavior(typeof(AuthorizationBehavior<,>));
+                config.AddOpenBehavior(typeof(LoggingBehavior<,>));
             });
+
+            services.AddScoped<LoggerServiceBase, FileLogger>();
+            services.AddScoped<LoggerServiceBase, MsSqlLogger>();
 
             // This registers all classes inheriting BaseBusinessRules in the DI container,
             // allowing centralized management of application business rules.

@@ -88,6 +88,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.ConfigureExceptionMiddlewareExtensions();
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
