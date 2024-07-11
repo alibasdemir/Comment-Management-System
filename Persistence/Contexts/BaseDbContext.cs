@@ -12,6 +12,8 @@ namespace Persistence.Contexts
         public DbSet<User> Users { get; set; }
         public DbSet<Assignment> Tasks { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<OperationClaim> OperationClaims { get; set; }
+        public DbSet<UserOperationClaim> UserOperationClaims { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
