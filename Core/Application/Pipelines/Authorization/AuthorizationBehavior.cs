@@ -1,4 +1,5 @@
 ﻿using Core.Application.Pipelines.Authorization.Constants;
+using Core.CrossCuttingConcerns.Exceptions.Types;
 using Core.Security.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -21,7 +22,7 @@ namespace Core.Application.Pipelines.Authorization
 
             if (!_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
             {
-                throw new Exception("You are not logged in!"); // refactor
+                throw new AuthorizationException("You are not logged in!");
             }
 
             // If no roles are required for the command or query, proceed to the next behavior
@@ -33,7 +34,7 @@ namespace Core.Application.Pipelines.Authorization
             List<string>? userRoleClaims = _httpContextAccessor.HttpContext.User.ClaimRoles();
 
             if (userRoleClaims == null)
-                throw new Exception("You are not authenticated."); // refactor
+                throw new AuthorizationException("You are not authenticated.");
 
             bool isNotMatchedAUserRoleClaimWithRequestRoles = userRoleClaims
                 .FirstOrDefault(
@@ -41,7 +42,7 @@ namespace Core.Application.Pipelines.Authorization
                 )
                 .IsNullOrEmpty();
             if (isNotMatchedAUserRoleClaimWithRequestRoles)
-                throw new Exception("You are not authorized."); // refactor
+                throw new AuthorizationException("You are not authorized.");
 
             TResponse response = await next();
             return response;

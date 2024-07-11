@@ -1,4 +1,5 @@
-﻿using Application.Repositories;
+﻿using Application.Features.Users.Rules;
+using Application.Repositories;
 using AutoMapper;
 using Core.Security.Entities;
 using Core.Security.Hashing;
@@ -17,15 +18,20 @@ namespace Application.Features.Users.Commands.Create
         {
             private readonly IUserRepository _userRepository;
             private readonly IMapper _mapper;
+            private readonly UserBusinessRules _userBusinessRules;
 
-            public CreateUserCommandHandler(IUserRepository userRepository, IMapper mapper)
+            public CreateUserCommandHandler(IUserRepository userRepository, IMapper mapper, UserBusinessRules userBusinessRules)
             {
                 _userRepository = userRepository;
                 _mapper = mapper;
+                _userBusinessRules = userBusinessRules;
             }
 
             public async Task<CreateUserResponse> Handle(CreateUserCommand request, CancellationToken cancellationToken)
             {
+                User? user = await _userRepository.GetAsync(i=> i.Email == request.Email);
+                await _userBusinessRules.UserEmailShouldBeNotExists(request.Email);
+
                 User mappedUser = _mapper.Map<User>(request);
 
                 byte[] passwordHash, passwordSalt;
