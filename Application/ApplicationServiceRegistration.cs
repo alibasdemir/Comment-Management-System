@@ -1,9 +1,10 @@
 ﻿using Core.Application.Pipelines.Authorization;
 using Core.Application.Pipelines.Logging;
 using Core.Application.Rules;
-using Core.CrossCuttingConcerns.Exceptions.Logging.Serilog;
-using Core.CrossCuttingConcerns.Exceptions.Logging.Serilog.Logger;
+using Core.CrossCuttingConcerns.Logging.Serilog;
+using Core.CrossCuttingConcerns.Logging.Serilog.Logger;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using System.Reflection;
 
 namespace Application
@@ -20,8 +21,22 @@ namespace Application
                 config.AddOpenBehavior(typeof(LoggingBehavior<,>));
             });
 
-            services.AddScoped<LoggerServiceBase, FileLogger>();
-            services.AddScoped<LoggerServiceBase, MsSqlLogger>();
+            services.AddSingleton<FileLogger>();
+            services.AddSingleton<MsSqlLogger>();
+
+            services.AddSingleton<LoggerServiceBase>(provider =>
+            {
+                var fileLogger = provider.GetRequiredService<FileLogger>();
+                var msSqlLogger = provider.GetRequiredService<MsSqlLogger>();
+
+                return new LoggerServiceBase
+                {
+                    Logger = new LoggerConfiguration()
+                        .WriteTo.Logger(fileLogger.Logger)
+                        .WriteTo.Logger(msSqlLogger.Logger)
+                        .CreateLogger()
+                };
+            });
 
             // This registers all classes inheriting BaseBusinessRules in the DI container,
             // allowing centralized management of application business rules.

@@ -1,10 +1,10 @@
 ﻿using Serilog;
 
-namespace Core.CrossCuttingConcerns.Exceptions.Logging.Serilog
+namespace Core.CrossCuttingConcerns.Logging.Serilog
 {
-    public abstract class LoggerServiceBase
+    public class LoggerServiceBase
     {
-        protected ILogger Logger { get; set; }
+        public ILogger Logger { get; set; }
 
         public void Verbose(string message) => Logger.Verbose(message);
 

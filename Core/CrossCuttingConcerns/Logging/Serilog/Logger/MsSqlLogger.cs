@@ -1,14 +1,15 @@
-﻿using Core.CrossCuttingConcerns.Exceptions.Logging.Serilog.ConfigurationModels;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Serilog.Sinks.MSSqlServer;
 using Serilog;
-using Core.CrossCuttingConcerns.Exceptions.Logging.Serilog.Messages;
+using Core.CrossCuttingConcerns.Logging.Serilog;
+using Core.CrossCuttingConcerns.Logging.Serilog.ConfigurationModels;
+using Core.CrossCuttingConcerns.Logging.Serilog.Messages;
 
-namespace Core.CrossCuttingConcerns.Exceptions.Logging.Serilog.Logger
+namespace Core.CrossCuttingConcerns.Logging.Serilog.Logger
 {
     public class MsSqlLogger : LoggerServiceBase
     {
-        public MsSqlLogger(IConfiguration configuration) 
+        public MsSqlLogger(IConfiguration configuration)
         {
             MsSqlConfiguration logConfiguration =
             configuration.GetSection("SeriLogConfigurations:MsSqlConfiguration").Get<MsSqlConfiguration>()

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Core.Security.JWT;
 using Microsoft.OpenApi.Models;
+using Core.CrossCuttingConcerns.Exceptions.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -88,7 +89,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.ConfigureExceptionMiddlewareExtensions();
+app.ConfigureCustomExceptionMiddleware();
 
 app.UseHttpsRedirection();
 

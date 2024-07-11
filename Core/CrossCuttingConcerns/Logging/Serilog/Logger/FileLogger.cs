@@ -1,9 +1,10 @@
-﻿using Core.CrossCuttingConcerns.Exceptions.Logging.Serilog.ConfigurationModels;
-using Core.CrossCuttingConcerns.Exceptions.Logging.Serilog.Messages;
+﻿using Core.CrossCuttingConcerns.Logging.Serilog;
+using Core.CrossCuttingConcerns.Logging.Serilog.ConfigurationModels;
+using Core.CrossCuttingConcerns.Logging.Serilog.Messages;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 
-namespace Core.CrossCuttingConcerns.Exceptions.Logging.Serilog.Logger
+namespace Core.CrossCuttingConcerns.Logging.Serilog.Logger
 {
     public class FileLogger : LoggerServiceBase
     {

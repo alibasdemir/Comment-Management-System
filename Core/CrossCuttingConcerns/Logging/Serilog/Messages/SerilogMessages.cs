@@ -1,4 +1,4 @@
-﻿namespace Core.CrossCuttingConcerns.Exceptions.Logging.Serilog.Messages
+﻿namespace Core.CrossCuttingConcerns.Logging.Serilog.Messages
 {
     public static class SerilogMessages
     {
