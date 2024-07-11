@@ -1,4 +1,5 @@
 ﻿using Core.Persistence;
+using Core.Security.Entities;
 
 namespace Domain.Entities
 {

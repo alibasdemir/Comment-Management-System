@@ -1,4 +1,5 @@
 ﻿using Core.Persistence;
+using Core.Security.Entities;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;

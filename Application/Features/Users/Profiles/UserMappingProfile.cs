@@ -1,6 +1,6 @@
 ﻿using Application.Features.Users.Commands.Create;
 using AutoMapper;
-using Domain.Entities;
+using Core.Security.Entities;
 
 namespace Application.Features.Users.Profiles
 {

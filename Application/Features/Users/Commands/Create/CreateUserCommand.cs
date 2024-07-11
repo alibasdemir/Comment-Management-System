@@ -1,7 +1,7 @@
 ﻿using Application.Repositories;
 using AutoMapper;
-using Core.Hashing;
-using Domain.Entities;
+using Core.Security.Entities;
+using Core.Security.Hashing;
 using MediatR;
 
 namespace Application.Features.Users.Commands.Create
