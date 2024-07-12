@@ -1,4 +1,5 @@
-﻿using Application.Services.OperationClaimService;
+﻿using Application.Services.AssignmentService;
+using Application.Services.OperationClaimService;
 using Application.Services.UserService;
 using Core.Application.Pipelines.Authorization;
 using Core.Application.Pipelines.Logging;
@@ -51,6 +52,7 @@ namespace Application
 
             services.AddScoped<IUserService, UserManager>();
             services.AddScoped<IOperationClaimService, OperationClaimManager>();
+            services.AddScoped<IAssignmentService, AssignmentManager>();
 
             return services;
         }

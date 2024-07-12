@@ -2,5 +2,6 @@
 {
     public static class AssignmentMessages
     {
+        public const string AssignmentNotExists = "Assignment not exists.";
     }
 }

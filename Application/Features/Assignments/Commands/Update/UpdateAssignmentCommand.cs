@@ -1,4 +1,5 @@
-﻿using Application.Repositories;
+﻿using Application.Features.Assignments.Rules;
+using Application.Repositories;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
@@ -15,15 +16,19 @@ namespace Application.Features.Assignments.Commands.Update
         {
             private readonly IAssignmentRepository _assignmentRepository;
             private readonly IMapper _mapper;
+            private readonly AssignmentBusinessRules _assignmentBusinessRules;
 
-            public UpdateAssignmentCommandHandler(IAssignmentRepository assignmentRepository, IMapper mapper)
+            public UpdateAssignmentCommandHandler(IAssignmentRepository assignmentRepository, IMapper mapper, AssignmentBusinessRules assignmentBusinessRules)
             {
                 _assignmentRepository = assignmentRepository;
                 _mapper = mapper;
+                _assignmentBusinessRules = assignmentBusinessRules;
             }
 
             public async Task<UpdateAssignmentResponse> Handle(UpdateAssignmentCommand request, CancellationToken cancellationToken)
             {
+                await _assignmentBusinessRules.AssignmentShouldExistWhenSelected(request.Id);
+
                 // Assignment mappedAssignment = _mapper.Map<Assignment>(request);
                 // We dont use this cause;
                 // * Preserve the current value of CreatedDate because we dont want it to be updated

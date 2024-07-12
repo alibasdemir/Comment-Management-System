@@ -23,7 +23,7 @@ namespace Application.Features.UserOperationClaims.Rules
 
         public async Task UserOperationClaimIdShouldExistWhenSelected(int id)
         {
-            UserOperationClaim? result = await _userOperationClaimRepository.GetAsync(predicate: b => b.Id == id, enableTracking: false);
+            UserOperationClaim? result = await _userOperationClaimRepository.GetAsync(predicate: i => i.Id == id, enableTracking: false);
             if (result == null)
             {
                 throw new BusinessException(UserOperationClaimsMessages.UserOperationClaimNotExists);
@@ -51,7 +51,7 @@ namespace Application.Features.UserOperationClaims.Rules
         public async Task UserShouldNotAlreadyHaveOperationClaim(int userId, int operationClaimId)
         {
             var userOperationClaim = await _userOperationClaimRepository.GetAsync(
-                predicate: b => b.UserId == userId && b.OperationClaimId == operationClaimId,
+                predicate: i => i.UserId == userId && i.OperationClaimId == operationClaimId,
                 enableTracking: false);
 
             if (userOperationClaim != null)

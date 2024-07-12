@@ -17,7 +17,7 @@ namespace Application.Features.OperationClaims.Rules
 
         public async Task OperationClaimIdShouldExistWhenSelected(int id)
         {
-            OperationClaim? result = await _operationClaimRepository.GetAsync(predicate: b => b.Id == id, enableTracking: false);
+            OperationClaim? result = await _operationClaimRepository.GetAsync(predicate: i => i.Id == id, enableTracking: false);
             if (result == null)
                 throw new BusinessException(OperationClaimMessages.OperationClaimNotExists);
         }

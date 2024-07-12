@@ -6,8 +6,8 @@ namespace Application.Features.UserOperationClaims.Commands.Update
     {
         public UpdateUserOperationClaimValidation()
         {
-            RuleFor(c => c.UserId).GreaterThan(0);
-            RuleFor(c => c.OperationClaimId).GreaterThan(0);
+            RuleFor(i => i.UserId).GreaterThan(0);
+            RuleFor(i => i.OperationClaimId).GreaterThan(0);
         }
     }
 }
