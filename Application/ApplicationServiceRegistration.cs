@@ -1,4 +1,6 @@
-﻿using Core.Application.Pipelines.Authorization;
+﻿using Application.Services.OperationClaimService;
+using Application.Services.UserService;
+using Core.Application.Pipelines.Authorization;
 using Core.Application.Pipelines.Logging;
 using Core.Application.Pipelines.Validation;
 using Core.Application.Rules;
@@ -46,6 +48,9 @@ namespace Application
             // This registers all classes inheriting BaseBusinessRules in the DI container,
             // allowing centralized management of application business rules.
             services.AddSubClassesOfType(Assembly.GetExecutingAssembly(), typeof(BaseBusinessRules));
+
+            services.AddScoped<IUserService, UserManager>();
+            services.AddScoped<IOperationClaimService, OperationClaimManager>();
 
             return services;
         }
