@@ -1,4 +1,5 @@
 ﻿using Application.Features.Auth.Commands.Login;
+using Application.Features.Auth.Commands.Register;
 using AutoMapper;
 using Core.Security.Entities;
 
@@ -9,6 +10,8 @@ namespace Application.Features.Auth.Profiles
         public AuthMappingProfile()
         {
             CreateMap<User, LoginCommand>().ReverseMap();
+            CreateMap<User, RegisterCommand>().ReverseMap();
+            CreateMap<User, RegisterResponse>().ReverseMap();
         }
     }
 }
