@@ -29,7 +29,6 @@ namespace Application.Features.Users.Commands.Create
 
             public async Task<CreateUserResponse> Handle(CreateUserCommand request, CancellationToken cancellationToken)
             {
-                User? user = await _userRepository.GetAsync(i=> i.Email == request.Email);
                 await _userBusinessRules.UserEmailShouldBeNotExists(request.Email);
 
                 User mappedUser = _mapper.Map<User>(request);

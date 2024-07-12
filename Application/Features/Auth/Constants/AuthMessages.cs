@@ -2,8 +2,8 @@
 {
     public static class AuthMessages
     {
-        public const string UserDontExists = "User don't exists.";
+        public const string UserDontExists = "Your email address or password is incorrect.";
         public const string UserMailAlreadyExists = "User mail already exists.";
-        public const string PasswordDontMatch = "Password don't match.";
+        public const string PasswordDontMatch = "Your email address or password is incorrect.";
     }
 }
