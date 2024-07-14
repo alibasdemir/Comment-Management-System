@@ -1,5 +1,7 @@
 ﻿using Application.Repositories;
 using AutoMapper;
+using Core.Application.Pipelines.Logging;
+using Core.Application.Pipelines.Performance;
 using Core.Application.Requests;
 using Core.Application.Responses;
 using Core.Persistence.Paging;
@@ -8,9 +10,11 @@ using MediatR;
 
 namespace Application.Features.Users.Queries.GetList
 {
-    public class GetListUserQuery : IRequest<GetListResponse<GetListUserResponse>>
+    public class GetListUserQuery : IRequest<GetListResponse<GetListUserResponse>>, IIntervalRequest
     {
         public PageRequest PageRequest { get; set; }
+
+        public int Interval { get; set; } = 1;
 
         public class GetListUserQueryHandler : IRequestHandler<GetListUserQuery, GetListResponse<GetListUserResponse>>
         {
