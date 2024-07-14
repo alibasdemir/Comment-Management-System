@@ -7,6 +7,7 @@ using Core.Application.Responses;
 using Core.Persistence.Paging;
 using Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.Assignments.Queries.GetList
 {
@@ -33,6 +34,7 @@ namespace Application.Features.Assignments.Queries.GetList
             public async Task<GetListResponse<GetListAssignmentResponse>> Handle(GetListAssignmentQuery request, CancellationToken cancellationToken)
             {
                 IPaginate<Assignment> assignments = await _assignmentRepository.GetListAsync(
+                    include: i => i.Include(i => i.Comments),
                     index: request.PageRequest.Page,
                     size: request.PageRequest.PageSize
                 );

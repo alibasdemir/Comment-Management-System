@@ -6,14 +6,16 @@ namespace Domain.Entities
     {
         public string Title { get; set; }
         public string Description { get; set; }
-
+        public virtual ICollection<Comment> Comments { get; set; }
         public Assignment()
         {
+            Comments = new HashSet<Comment>();
         }
 
         public Assignment(int id, string title, string description)
-            : base(id)
+            : this()
         {
+            Id = id;
             Title = title;
             Description = description;
         }

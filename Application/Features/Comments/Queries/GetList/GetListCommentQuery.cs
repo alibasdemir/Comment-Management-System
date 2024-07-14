@@ -6,6 +6,7 @@ using Core.Application.Responses;
 using Core.Persistence.Paging;
 using Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.Comments.Queries.GetList
 {
@@ -32,6 +33,7 @@ namespace Application.Features.Comments.Queries.GetList
             public async Task<GetListResponse<GetListCommentResponse>> Handle(GetListCommentQuery request, CancellationToken cancellationToken)
             {
                 IPaginate<Comment> comments = await _commentRepository.GetListAsync(
+                    include: i => i.Include(i => i.User).Include(i => i.Assignment),
                     index: request.PageRequest.Page,
                     size: request.PageRequest.PageSize
                 );

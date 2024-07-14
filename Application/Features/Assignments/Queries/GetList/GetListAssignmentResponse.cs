@@ -1,4 +1,6 @@
-﻿namespace Application.Features.Assignments.Queries.GetList
+﻿using Application.Features.Comments.Queries.GetById;
+
+namespace Application.Features.Assignments.Queries.GetList
 {
     public class GetListAssignmentResponse
     {
@@ -7,5 +9,7 @@
         public string Description { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
+
+        public ICollection<GetByIdCommentResponse> Comments { get; set; }
     }
 }

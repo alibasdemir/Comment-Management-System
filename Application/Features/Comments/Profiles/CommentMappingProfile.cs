@@ -23,7 +23,12 @@ namespace Application.Features.Comments.Profiles
             CreateMap<Comment, GetByIdCommentQuery>().ReverseMap();
             CreateMap<Comment, GetByIdCommentResponse>().ReverseMap();
             CreateMap<Comment, GetListCommentQuery>().ReverseMap();
-            CreateMap<Comment, GetListCommentResponse>().ReverseMap();
+            CreateMap<Comment, GetListCommentResponse>()
+                .ForMember(destinationMember: i => i.UserEmail, memberOptions: opt => opt.MapFrom(i => i.User.Email))
+                .ForMember(destinationMember: i => i.UserFirstName, memberOptions: opt => opt.MapFrom(i => i.User.FirstName))
+                .ForMember(destinationMember: i => i.UserLastName, memberOptions: opt => opt.MapFrom(i => i.User.LastName))
+                .ForMember(destinationMember: i => i.AssignmentTitle, memberOptions: opt => opt.MapFrom(i => i.Assignment.Title))
+                .ReverseMap();
             CreateMap<IPaginate<Comment>, GetListResponse<GetListCommentResponse>>().ReverseMap();
         }
     }

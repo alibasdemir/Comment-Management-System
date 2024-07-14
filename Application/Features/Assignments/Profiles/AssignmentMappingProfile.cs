@@ -23,7 +23,9 @@ namespace Application.Features.Assignments.Profiles
             CreateMap<Assignment, GetByIdAssignmentQuery>().ReverseMap();
             CreateMap<Assignment, GetByIdAssignmentResponse>().ReverseMap();
             CreateMap<Assignment, GetListAssignmentQuery>().ReverseMap();
-            CreateMap<Assignment, GetListAssignmentResponse>().ReverseMap();
+            CreateMap<Assignment, GetListAssignmentResponse>()
+                .ForMember(destinationMember: dest => dest.Comments, memberOptions: opt => opt.MapFrom(src => src.Comments))
+                .ReverseMap();
             CreateMap<IPaginate<Assignment>, GetListResponse<GetListAssignmentResponse>>().ReverseMap();
         }
     }
