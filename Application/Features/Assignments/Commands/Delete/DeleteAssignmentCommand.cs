@@ -1,14 +1,20 @@
 ﻿using Application.Features.Assignments.Rules;
 using Application.Repositories;
 using AutoMapper;
+using Core.Application.Pipelines.Caching;
+using Core.Application.Pipelines.Logging;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Features.Assignments.Commands.Delete
 {
-    public class DeleteAssignmentCommand : IRequest<DeleteAssignmentResponse>
+    public class DeleteAssignmentCommand : IRequest<DeleteAssignmentResponse>, ILoggableRequest, ICacheRemoverRequest
     {
         public int Id { get; set; }
+
+        public bool BypassCache { get; }
+        public string? CacheKey { get; }
+        public string CacheGroupKey => "GetAssignments";
 
         public class DeleteAssignmentCommandHandler : IRequestHandler<DeleteAssignmentCommand, DeleteAssignmentResponse>
         {

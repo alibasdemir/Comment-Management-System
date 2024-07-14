@@ -80,6 +80,12 @@ builder.Services
         };
     });
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = "redis-19864.c72.eu-west-1-2.ec2.redns.redis-cloud.com:19864,password=WbE5FePEba7dFzIvsfPHiaa9Z6m27wWR";
+
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

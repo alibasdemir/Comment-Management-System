@@ -1,5 +1,6 @@
 ﻿using Application.Repositories;
 using AutoMapper;
+using Core.Application.Pipelines.Caching;
 using Core.Application.Requests;
 using Core.Application.Responses;
 using Core.Persistence.Paging;
@@ -8,9 +9,14 @@ using MediatR;
 
 namespace Application.Features.Comments.Queries.GetList
 {
-    public class GetListCommentQuery : IRequest<GetListResponse<GetListCommentResponse>>
+    public class GetListCommentQuery : IRequest<GetListResponse<GetListCommentResponse>>, ICachableRequest
     {
         public PageRequest PageRequest { get; set; }
+
+        public string CacheKey => $"GetListComment-{PageRequest.Page}, {PageRequest.PageSize}";
+        public string CacheGroupKey => "GetComments";
+        public bool BypassCache { get; set; }
+        public TimeSpan? SlidingExpiration { get; set; }
 
         public class GetListCommentQueryHandler : IRequestHandler<GetListCommentQuery, GetListResponse<GetListCommentResponse>>
         {

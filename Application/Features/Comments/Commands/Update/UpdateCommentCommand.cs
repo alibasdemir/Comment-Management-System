@@ -1,17 +1,23 @@
 ﻿using Application.Features.Comments.Rules;
 using Application.Repositories;
 using AutoMapper;
+using Core.Application.Pipelines.Caching;
+using Core.Application.Pipelines.Logging;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Features.Comments.Commands.Update
 {
-    public class UpdateCommentCommand : IRequest<UpdateCommentResponse>
+    public class UpdateCommentCommand : IRequest<UpdateCommentResponse>, ILoggableRequest, ICacheRemoverRequest
     {
         public int Id { get; set; }
         public int AssignmentId { get; set; }
         public int UserId { get; set; }
         public string Content { get; set; }
+
+        public bool BypassCache { get; }
+        public string? CacheKey { get; }
+        public string CacheGroupKey => "GetComments";
 
         public class UpdateCommentCommandHandler : IRequestHandler<UpdateCommentCommand, UpdateCommentResponse>
         {

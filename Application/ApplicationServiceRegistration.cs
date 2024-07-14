@@ -2,6 +2,7 @@
 using Application.Services.OperationClaimService;
 using Application.Services.UserService;
 using Core.Application.Pipelines.Authorization;
+using Core.Application.Pipelines.Caching;
 using Core.Application.Pipelines.Logging;
 using Core.Application.Pipelines.Validation;
 using Core.Application.Rules;
@@ -10,6 +11,7 @@ using Core.CrossCuttingConcerns.Logging.Serilog.Logger;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using System.Configuration;
 using System.Reflection;
 
 namespace Application
@@ -23,6 +25,8 @@ namespace Application
             {
                 config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
                 config.AddOpenBehavior(typeof(AuthorizationBehavior<,>));
+                config.AddOpenBehavior(typeof(CachingBehavior<,>));
+                config.AddOpenBehavior(typeof(CacheRemovingBehavior<,>));
                 config.AddOpenBehavior(typeof(LoggingBehavior<,>));
                 config.AddOpenBehavior(typeof(ValidationBehavior<,>));
             });

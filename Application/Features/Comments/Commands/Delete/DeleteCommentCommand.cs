@@ -1,14 +1,20 @@
 ﻿using Application.Features.Comments.Rules;
 using Application.Repositories;
 using AutoMapper;
+using Core.Application.Pipelines.Caching;
+using Core.Application.Pipelines.Logging;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Features.Comments.Commands.Delete
 {
-    public class DeleteCommentCommand : IRequest<DeleteCommentResponse>
+    public class DeleteCommentCommand : IRequest<DeleteCommentResponse>, ILoggableRequest, ICacheRemoverRequest
     {
         public int Id { get; set; }
+
+        public bool BypassCache { get; }
+        public string? CacheKey { get; }
+        public string CacheGroupKey => "GetComments";
 
         public class DeleteCommentCommandHandler : IRequestHandler<DeleteCommentCommand, DeleteCommentResponse>
         {
