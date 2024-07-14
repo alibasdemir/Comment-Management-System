@@ -14,8 +14,7 @@ namespace Application.Features.Users.Queries.GetList
     {
         public PageRequest PageRequest { get; set; }
 
-        public int Interval { get; set; } = 1;
-
+        public int Interval { get; set; } = 1; // time in milliseconds to evaluate performance
         public class GetListUserQueryHandler : IRequestHandler<GetListUserQuery, GetListResponse<GetListUserResponse>>
         {
             private readonly IUserRepository _userRepository;

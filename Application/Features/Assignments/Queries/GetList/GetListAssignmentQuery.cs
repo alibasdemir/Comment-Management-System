@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.Assignments.Queries.GetList
 {
-    public class GetListAssignmentQuery : IRequest<GetListResponse<GetListAssignmentResponse>>, ICachableRequest, IIntervalRequest
+    public class GetListAssignmentQuery : IRequest<GetListResponse<GetListAssignmentResponse>>, ICachableRequest
     {
         public PageRequest PageRequest { get; set; }
 
@@ -20,9 +20,6 @@ namespace Application.Features.Assignments.Queries.GetList
         public string CacheGroupKey => "GetAssignments";
         public bool BypassCache { get; set; } // default: false. dont want true cause cache will be bypassed. or can be used -> public bool BypassCache => false;
         public TimeSpan? SlidingExpiration { get; set; } // or public TimeSpan? SlidingExpiration => TimeSpan.FromMinutes(30);
-
-        public int Interval { get; set; } = 1; // time in milliseconds to evaluate performance
-
 
         public class GetListAssignmentQueryHandler : IRequestHandler<GetListAssignmentQuery, GetListResponse<GetListAssignmentResponse>>
         {
