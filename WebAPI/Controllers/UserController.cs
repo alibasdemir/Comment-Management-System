@@ -3,8 +3,10 @@ using Application.Features.Users.Commands.Delete;
 using Application.Features.Users.Commands.Update;
 using Application.Features.Users.Queries.GetById;
 using Application.Features.Users.Queries.GetList;
+using Application.Features.Users.Queries.GetListDynamic;
 using Core.Application.Requests;
 using Core.Application.Responses;
+using Core.Dynamic;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -49,6 +51,14 @@ namespace WebAPI.Controllers
             GetListUserQuery getListUserQuery = new() { PageRequest = pageRequest };
             GetListResponse<GetListUserResponse> getListUserResponse = await _mediator.Send(getListUserQuery);
             return Ok(getListUserResponse);
+        }
+
+        [HttpPost("GetList/Dynamic")]
+        public async Task<IActionResult> GetListDynamic([FromQuery] PageRequest pageRequest, [FromBody] DynamicQuery? dynamicQuery = null)
+        {
+            GetListDynamicUserQuery getListDynamicUserQuery = new() { PageRequest = pageRequest, DynamicQuery = dynamicQuery };
+            GetListResponse<GetListDynamicUserResponse> getListDynamicUserResponse = await _mediator.Send(getListDynamicUserQuery);
+            return Ok(getListDynamicUserResponse);
         }
     }
 }

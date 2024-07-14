@@ -3,8 +3,10 @@ using Application.Features.Comments.Commands.Delete;
 using Application.Features.Comments.Commands.Update;
 using Application.Features.Comments.Queries.GetById;
 using Application.Features.Comments.Queries.GetList;
+using Application.Features.Comments.Queries.GetListDynamic;
 using Core.Application.Requests;
 using Core.Application.Responses;
+using Core.Dynamic;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -49,6 +51,14 @@ namespace WebAPI.Controllers
             GetListCommentQuery getListCommentQuery = new() { PageRequest = pageRequest };
             GetListResponse<GetListCommentResponse> getListCommentResponse = await _mediator.Send(getListCommentQuery);
             return Ok(getListCommentResponse);
+        }
+
+        [HttpPost("GetList/Dynamic")]
+        public async Task<IActionResult> GetListDynamic([FromQuery] PageRequest pageRequest, [FromBody] DynamicQuery? dynamicQuery = null)
+        {
+            GetListDynamicCommentQuery getListDynamicCommentQuery = new() { PageRequest = pageRequest, DynamicQuery = dynamicQuery };
+            GetListResponse<GetListDynamicCommentResponse> getListDynamicCommentResponse = await _mediator.Send(getListDynamicCommentQuery);
+            return Ok(getListDynamicCommentResponse);
         }
     }
 }

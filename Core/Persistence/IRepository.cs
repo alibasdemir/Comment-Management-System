@@ -1,4 +1,5 @@
-﻿using Core.Persistence.Paging;
+﻿using Core.Dynamic;
+using Core.Persistence.Paging;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 
@@ -22,8 +23,17 @@ namespace Core.Persistence
         );
 
         void Add(T entity);
-        void Delete (T entity);
-        void SoftDelete (T entity);
-        void Update (T entity);
+        void Delete(T entity);
+        void SoftDelete(T entity);
+        void Update(T entity);
+
+        IPaginate<T> GetListByDynamic(
+    DynamicQuery dynamic,
+    Expression<Func<T, bool>>? predicate = null,
+    Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null,
+    int index = 0,
+    int size = 10,
+    bool enableTracking = true
+);
     }
 }

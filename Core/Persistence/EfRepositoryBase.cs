@@ -1,4 +1,5 @@
-﻿using Core.Persistence.Paging;
+﻿using Core.Dynamic;
+using Core.Persistence.Paging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
@@ -77,6 +78,25 @@ namespace Core.Persistence
             return await queryable.ToPaginateAsync(index, size, from: 0, cancellationToken);
         }
 
+        public async Task<IPaginate<TEntity>> GetListByDynamicAsync(
+    DynamicQuery dynamic,
+    Expression<Func<TEntity, bool>>? predicate = null,
+    Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+    int index = 0,
+    int size = 10,
+    bool enableTracking = true,
+    CancellationToken cancellationToken = default
+)
+        {
+            IQueryable<TEntity> queryable = Query().ToDynamic(dynamic);
+            if (!enableTracking)
+                queryable = queryable.AsNoTracking();
+            if (include != null)
+                queryable = include(queryable);
+            if (predicate != null)
+                queryable = queryable.Where(predicate);
+            return await queryable.ToPaginateAsync(index, size, from: 0, cancellationToken);
+        }
         public void Add(TEntity entity)
         {
             Context.Add(entity);
@@ -134,6 +154,25 @@ namespace Core.Persistence
                 queryable = queryable.Where(predicate);
             if (orderBy != null)
                 return orderBy(queryable).ToPaginate(index, size);
+            return queryable.ToPaginate(index, size);
+        }
+
+        public IPaginate<TEntity> GetListByDynamic(
+    DynamicQuery dynamic,
+    Expression<Func<TEntity, bool>>? predicate = null,
+    Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+    int index = 0,
+    int size = 10,
+    bool enableTracking = true
+)
+        {
+            IQueryable<TEntity> queryable = Query().ToDynamic(dynamic);
+            if (!enableTracking)
+                queryable = queryable.AsNoTracking();
+            if (include != null)
+                queryable = include(queryable);
+            if (predicate != null)
+                queryable = queryable.Where(predicate);
             return queryable.ToPaginate(index, size);
         }
     }

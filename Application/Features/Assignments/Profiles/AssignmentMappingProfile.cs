@@ -3,6 +3,7 @@ using Application.Features.Assignments.Commands.Delete;
 using Application.Features.Assignments.Commands.Update;
 using Application.Features.Assignments.Queries.GetById;
 using Application.Features.Assignments.Queries.GetList;
+using Application.Features.Assignments.Queries.GetListDynamic;
 using AutoMapper;
 using Core.Application.Responses;
 using Core.Persistence.Paging;
@@ -27,6 +28,9 @@ namespace Application.Features.Assignments.Profiles
                 .ForMember(destinationMember: dest => dest.Comments, memberOptions: opt => opt.MapFrom(src => src.Comments))
                 .ReverseMap();
             CreateMap<IPaginate<Assignment>, GetListResponse<GetListAssignmentResponse>>().ReverseMap();
+            CreateMap<Assignment, GetListDynamicAssignmentQuery>().ReverseMap();
+            CreateMap<Assignment, GetListDynamicAssignmentResponse>().ReverseMap();
+            CreateMap<IPaginate<Assignment>, GetListResponse<GetListDynamicAssignmentResponse>>().ReverseMap();
         }
     }
 }

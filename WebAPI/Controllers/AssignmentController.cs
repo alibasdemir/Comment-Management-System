@@ -3,8 +3,10 @@ using Application.Features.Assignments.Commands.Delete;
 using Application.Features.Assignments.Commands.Update;
 using Application.Features.Assignments.Queries.GetById;
 using Application.Features.Assignments.Queries.GetList;
+using Application.Features.Assignments.Queries.GetListDynamic;
 using Core.Application.Requests;
 using Core.Application.Responses;
+using Core.Dynamic;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -49,6 +51,14 @@ namespace WebAPI.Controllers
             GetListAssignmentQuery getListAssignmentQuery = new() { PageRequest = pageRequest };
             GetListResponse<GetListAssignmentResponse> getListAssignmentResponse = await _mediator.Send(getListAssignmentQuery);
             return Ok(getListAssignmentResponse);
+        }
+
+        [HttpPost("GetList/Dynamic")]
+        public async Task<IActionResult> GetListDynamic([FromQuery] PageRequest pageRequest, [FromBody] DynamicQuery? dynamicQuery = null)
+        {
+            GetListDynamicAssignmentQuery getListDynamicAssignmentQuery = new() { PageRequest = pageRequest, DynamicQuery = dynamicQuery };
+            GetListResponse<GetListDynamicAssignmentResponse> getListDynamicAssignmentResponse = await _mediator.Send(getListDynamicAssignmentQuery);
+            return Ok(getListDynamicAssignmentResponse);
         }
     }
 }
