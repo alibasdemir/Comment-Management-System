@@ -1,6 +1,8 @@
-﻿using Application.Features.Assignments.Rules;
+﻿using Application.Features.Assignments.Constants;
+using Application.Features.Assignments.Rules;
 using Application.Repositories;
 using AutoMapper;
+using Core.Application.Pipelines.Authorization;
 using Core.Application.Pipelines.Caching;
 using Core.Application.Pipelines.Logging;
 using Domain.Entities;
@@ -8,11 +10,13 @@ using MediatR;
 
 namespace Application.Features.Assignments.Commands.Update
 {
-    public class UpdateAssignmentCommand : IRequest<UpdateAssignmentResponse>, ILoggableRequest, ICacheRemoverRequest
+    public class UpdateAssignmentCommand : IRequest<UpdateAssignmentResponse>, ILoggableRequest, ICacheRemoverRequest, ISecuredRequest
     {
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+
+        public string[] Roles => ["Admin", AssignmentOperationClaims.Admin, AssignmentOperationClaims.Write];
 
         public bool BypassCache { get; }
         public string? CacheKey { get; }

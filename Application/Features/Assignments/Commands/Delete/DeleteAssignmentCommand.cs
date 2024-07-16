@@ -1,6 +1,8 @@
-﻿using Application.Features.Assignments.Rules;
+﻿using Application.Features.Assignments.Constants;
+using Application.Features.Assignments.Rules;
 using Application.Repositories;
 using AutoMapper;
+using Core.Application.Pipelines.Authorization;
 using Core.Application.Pipelines.Caching;
 using Core.Application.Pipelines.Logging;
 using Domain.Entities;
@@ -8,9 +10,10 @@ using MediatR;
 
 namespace Application.Features.Assignments.Commands.Delete
 {
-    public class DeleteAssignmentCommand : IRequest<DeleteAssignmentResponse>, ILoggableRequest, ICacheRemoverRequest
+    public class DeleteAssignmentCommand : IRequest<DeleteAssignmentResponse>, ILoggableRequest, ICacheRemoverRequest, ISecuredRequest
     {
         public int Id { get; set; }
+        public string[] Roles => ["Admin", AssignmentOperationClaims.Admin, AssignmentOperationClaims.Delete];
 
         public bool BypassCache { get; }
         public string? CacheKey { get; }

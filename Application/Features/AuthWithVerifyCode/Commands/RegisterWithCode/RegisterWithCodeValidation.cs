@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 
-namespace Application.Features.Auth.Commands.Register
+namespace Application.Features.AuthWithVerifyCode.Commands.RegisterWithCode
 {
-    public class RegisterWithCodeValidation : AbstractValidator<RegisterCommand>
+    public class RegisterWithCodeValidation : AbstractValidator<RegisterWithCodeCommand>
     {
         public RegisterWithCodeValidation()
         {

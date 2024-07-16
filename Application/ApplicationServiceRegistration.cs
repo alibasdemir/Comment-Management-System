@@ -1,4 +1,5 @@
 ﻿using Application.Services.AssignmentService;
+using Application.Services.MailService;
 using Application.Services.OperationClaimService;
 using Application.Services.UserService;
 using Core.Application.Pipelines.Authorization;
@@ -10,9 +11,10 @@ using Core.Application.Rules;
 using Core.CrossCuttingConcerns.Logging.Serilog;
 using Core.CrossCuttingConcerns.Logging.Serilog.Logger;
 using FluentValidation;
+using Infrastructure.Mail;
+using Infrastructure.Mail.MailKitImplementations;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using System.Configuration;
 using System.Reflection;
 
 namespace Application
@@ -35,6 +37,7 @@ namespace Application
 
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
+            services.AddSingleton<IMailService, MailKitMailService>();
             services.AddSingleton<FileLogger>();
             services.AddSingleton<MsSqlLogger>();
 
@@ -59,6 +62,7 @@ namespace Application
             services.AddScoped<IUserService, UserManager>();
             services.AddScoped<IOperationClaimService, OperationClaimManager>();
             services.AddScoped<IAssignmentService, AssignmentManager>();
+            services.AddScoped<IEmailAuthenticatorService, EmailAuthenticatorManager>();
 
             return services;
         }
