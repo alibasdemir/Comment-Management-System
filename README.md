@@ -2,107 +2,92 @@
 
 This project is a comment management system developed using .NET Onion Architecture. This API allows users to manage comments on tasks within the system. Users can create, read, update, and delete comments, ensuring efficient collaboration and feedback on tasks. 
 
-The project utilizes technologies such as **Entity Framework, CQRS, LINQ, DTO, MediatR, AutoMapper, FluentValidation, Global Handling Exception, JWT, Pipelines, Redis Cache, Serilog, Dynamic.LINQ, MailKit, and MimeKit.**
+The project uses a structure where data is stored in an MSSQL database. Additionally, there are extra features such as *user management, roles, logging, caching, and performance measurement*.
+
+The project utilizes technologies such as **.NET Core, Entity Framework, CQRS, LINQ, DTO, MediatR, AutoMapper, FluentValidation, Global Handling Exception, JWT, Pipelines, Redis Cache, Serilog, Dynamic.LINQ, MailKit, and MimeKit.**
 
 ## Key Features:
 
-- **Comment Management:** Users can add comments to tasks, edit existing comments, delete comments, and retrieve a list of comments. Additionally, comments can be filtered based on specific criteria to enhance usability.
+- **Comment Management:** 
+Users can add comments to tasks, edit existing comments, delete comments, and retrieve a list of comments. Additionally, comments can be filtered based on specific criteria to enhance usability.
 
-- **Email Verification:** When users register, a verification code is sent to their email. Users are required to verify their accounts by entering this code, ensuring secure account management.
+- **Authorization and Authentication**
+The project uses JWT (JSON Web Token) for user authorization and authentication. Roles can be assigned to each user, and authorization operations are performed based on these roles. User information (email, firstname, lastname, and roles) is stored within the token. User roles are maintained in the OperationClaim and UserOperationClaim tables.
 
-- **Authorization and Role System:** The system implements a robust authorization framework. Thanks to the role-based access control, users cannot delete or update resources they do not have permission for, ensuring data integrity and security.
+- **Hashing and Salting**
+Hashing and salting are used to securely store user passwords. Hashing converts the password into a fixed-length string, while salting adds a unique value to each password before hashing, providing an additional layer of security against attacks.
+
+- **Business Rules**
+Business rules define the logic and constraints that govern how the application behaves. These rules are essential for ensuring data integrity and enforcing the policies that dictate application functionality.
+
+- **Email Verification**
+When users register, a 6-digit verification code is sent to their email addresses. They must enter this code in the email verification field to verify their account. Verified users can log in, while unverified users receive a warning upon login. MailKit and MimeKit are used for sending emails.
+
+- **Global Handling Exception**
+Global exception handling ensures that any unhandled exceptions within the application are captured and processed uniformly. This prevents sensitive information from being exposed and provides a consistent response structure for API clients.
+
+- **Dynamic Filter**
+Dynamic filtering allows the application to apply filters to data queries at runtime, enabling more flexible and efficient data retrieval based on user input or specific conditions.
+
+- **Pagination**
+Pagination helps manage large datasets by splitting them into smaller, manageable chunks. This improves performance and usability, making it easier for users to navigate through data sets.
+
+- **Logging**
+The application uses Serilog for logging. Logs are stored both as files and in the MSSQL database. Global exception handling and other operation details are logged. Related classes are located in the CrossCuttingConcerns folder.
+
+- **Caching**
+Caching operations are performed using Redis Cloud. A caching mechanism is utilized to enhance the performance of requests. To add cache, the ICachableRequest interface is used, and to remove from cache, the ICacheRemoverRequest interface is utilized.
+
+- **Validation**
+Input validation is performed using FluentValidation. For example, rules are defined here to ensure that the email field is in the correct format and that passwords meet a certain length.
+
+- **Performance Measurement**
+Performance measurements are taken during list retrieval operations. These measurements are used to determine how long requests take and are displayed in the Visual Studio debug console.
 
 ## Project Architecture
 
 ### Layers
 
-- **Core**: Contains core functionalities like pipelines, middleware, and other components that are not dependent on external services. These components can be easily reused in other projects.
-- **Domain**: Contains the domain entities.
-- **Application**: Implements business rules, uses the CQRS pattern, defines services, and contains abstract repositories.
-- **Infrastructure**: Contains external dependencies like email services.
-- **Persistence**: Contains data access layer and concrete repositories.
-- **WebAPI**: Defines and exposes API endpoints.
+- **Domain**
+This layer includes the entities.
+
+- **Persistence**
+This layer serves as the data access layer and performs database operations using Entity Framework Core. Concrete repository classes are located here. Separate concrete repositories have been created for each entity.
+
+- **Application**
+The application layer implements the CQRS (Command Query Responsibility Segregation) pattern and contains business logic and business rules. This layer includes DTOs, CQRS pattern; commands, queries, and handlers. Service registrations and dependencies are also defined here. And defines services, contains abstract repositories.
+
+- **Core**
+This layer contains core functionalities such as middleware, including global exception handling, as well as pipelines and other components that are independent of external services. These components are designed for easy reuse in other projects.
+
+- **WebAPI**
+The WebAPI layer exposes RESTful APIs. Controllers and API endpoints are found here.
+
+- **Infrastructure**
+This layer contains implementation details that support the application, such as external services. For instance, the mail service for sending emails is implemented here, allowing for integration with email providers and managing email-related operations.
 
 ## Technologies and Tools Used
 
-### ORM and Data Access
-
-- **Entity Framework Core**: ORM tool for data access.
-- **MSSQL**: Database management system.
-
-### Design Patterns and Architectures
-
-- **Onion Architecture**: Layered architecture pattern.
-- **CQRS**: Command Query Responsibility Segregation.
-- **Repository Pattern**: Data access using repository pattern.
-- **Dependency Injection**: Dependency injection for service management.
-
-### Data Transfer and Mapping
-
-- **DTO (Data Transfer Object)**: Data transfer objects.
-- **AutoMapper**: Object-to-object mapping.
-
-### MediatR
-
+- **Architecture**: Onion Architecture
+- **Framework**: .NET Core 8
+- **ORM**: Entity Framework Core
+- **Database**: MSSQL
+- **Design Patterns**: CQRS, Repository Pattern, Dependency Injection
+- **Data Transfer**: DTO(Data Transfer Object)
+- **Mapping**: AutoMapper
 - **MediatR**: Implements CQRS pattern using MediatR library.
-
-### Pipeline
-
-- **Pipeline**: Pipeline behaviors for authorization, caching, logging, performance measurement and validation.
-
-### Validation
-
-- **FluentValidation**: Input validation for requests.
-
-### Business Rules
-
 - **Business Rules**: Separate business rules implemented for each entity.
-
-### Caching
-
-- **Redis**: Caching using Redis Cloud.
-- **ICachableRequest and ICachableRemoverRequest**: Interfaces for caching operations.
-
-### Logging
-
-- **Serilog**: Logging using Serilog.
-- **File and MSSQL Log**: Logs are saved both to file and MSSQL database.
-
-### Exception Handling
-
-- **Global Exception Handling**: Middleware for global exception handling.
-
-### Security
-
-- **JWT (JSON Web Token)**: For secure authentication and authorization mechanisms.
-- **Password Hashing + Salting**: Hashing and salting for user passwords.
-
-### Pagination and Performance
-
+- **Pipeline**: Pipeline behaviors for authorization, caching, logging, performance measurement and validation.
+- **Validation**: FluentValidation
+- **Caching**: Redis
+- **Logging**: Serilog (for file and mssql)
+- **Exception Handling**: Global Exception Handling(middleware)
+- **Security**: JWT (JSON Web Token)
+- **Encryption**: Hashing and Salting
 - **Pagination**: Pagination for all GetList methods.
 - **Performance Measurement**: Simple mechanism for performance measurement in milliseconds.
-
-### Email Verification
-
-- **MailKit and MimeKit**: Email verification using MailKit and MimeKit libraries.
-
-### Dynamic Filtering
-
-- **Dynamic LINQ**: Enables dynamic query building using string expressions.
-
-### User Role Management
-
-- **OperationClaim**: Stores role names.
-- **UserOperationClaim**: Assigns roles to users.
-
-### Additional Features
-
-- **User Management**: Efficient management of user information.
-- **Roles**: Role-based access control and management.
-- **Logging**: Detailed logging for monitoring and troubleshooting.
-- **Caching**: Enhanced performance through caching mechanisms.
-- **Performance Measurement**: Tools for measuring and optimizing application performance.
-- **Email Verification**: Users verify email to activate accounts.
+- **Email Service**: MailKit and MimeKit (for Email verification)
+- **Dynamic Filtering**: Dynamic.LINQ
 
 ## API Endpoint Overview
 
@@ -129,37 +114,36 @@ Each endpoint is designed in accordance with RESTful principles to support the c
 
 ### Steps
 
-1. Clone the Repository
+1. **Clone the Repository**
 
 ```
 git clone this repository
 cd <your-repository-directory>
 ```
 
-2. Install Dependencies
+2. **Install Dependencies**
 
 ```
 dotnet restore
 ```
 
-3. Configure Connection Strings
+3. **Configure Connection Strings**
 
-```
-Update the appsettings.json file with your database connection strings (and look BaseDbContext in Persistence Layer), Redis configuration and email configuration
-```
+Update the *appsettings.json* file with your database connection strings (and look BaseDbContext in Persistence Layer), Redis configuration and email configuration
 
-4. Run Migrations
 
-Tools -> NuGet Package Manager -> Package Manager Console
+4. **Run Migrations**
+
+*Tools -> NuGet Package Manager -> Package Manager Console*
 
 ```
 Add-Migration MigrationName
 Update-Database
 ```
 
-**Note:** After running the migrations, your database will be populated with seed data, ensuring that you have initial data available for use.
+**Note:** After running the migrations, your database will be populated *with seed data*, ensuring that you have initial data available for use.
 
-5. Run the Application
+5. **Run the Application**
 
 ```
 dotnet run
@@ -167,7 +151,7 @@ dotnet run
 
 ### Testing the API
 
-You can use tools like Postman or curl to test the API endpoints once the application is running. Additionally, Swagger is already set up in this project, allowing you to directly explore and test the API endpoints through its interactive interface.
+You can use tools like *Postman* or *curl* to test the API endpoints once the application is running. Additionally, *Swagger* is already set up in this project, allowing you to directly explore and test the API endpoints through its interactive interface.
 
 ## Contribution
 
@@ -179,18 +163,21 @@ If you would like to contribute to this project, please open an issue first to d
 
 --------------------------------------------------------------------
 
-<img src="./imgs/2.png" width="900" height="600">
+<img src="./imgs/2.png" width="900" height="500">
 
 --------------------------------------------------------------------
 
-<img src="./imgs/3.png" width="900" height="500">
+<img src="./imgs/3.png" width="900" height="550">
 
 --------------------------------------------------------------------
 
-<img src="./imgs/4.png" width="900" height="650">
+<img src="./imgs/4.png" width="900" height="700">
 
 --------------------------------------------------------------------
 
+<img src="./imgs/7.png" width="800" height="500">
+
+--------------------------------------------------------------------
 <img src="./imgs/5.png" width="700" height="500">
 
 --------------------------------------------------------------------
